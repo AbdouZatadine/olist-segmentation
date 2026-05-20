@@ -1,0 +1,26 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="page-head">
+    <div>
+        <h1 class="page-title">Sources CSV</h1>
+        <p class="page-sub">Les 9 fichiers du dataset Olist Brazil utilisés pour la segmentation</p>
+    </div>
+</div>
+
+<div class="fichiers-grid">
+    {% for f in fichiers %}
+    <div class="fichier-card">
+        <div class="fichier-icon" style="background: {{ f.bg }}; color: {{ f.couleur }};">
+            <i class="fa-solid {{ f.icon }}"></i>
+        </div>
+        <div class="fichier-info">
+            <div class="fichier-nom">{{ f.nom }}</div>
+            <div class="fichier-meta">{{ "{:,}".format(f.lignes) }} lignes · {{ f.colonnes }} colonnes</div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="page-head">
+    <div>
+        <h1 class="page-title">Segments</h1>
+        <p class="page-sub">Cliquez sur un segment pour afficher sa stratégie</p>
+    </div>
+</div>
+
+<!-- CARTES SEGMENTS -->
+<div class="segments-grid">
+    {% for row in moyennes %}
+    <div class="segment-card seg-{{ row.segment_nom | lower | replace(' ', '-') }}" 
+         onclick="showSegment('{{ row.segment_nom }}', this)" >
+        
+        <div class="seg-header">
+            <div class="seg-icon seg-icon-{{ row.segment_nom | lower | replace(' ', '-') }}">
+                {% if row.segment_nom == 'Fidèles' %}<i class="fa-solid fa-heart"></i>
+                {% elif row.segment_nom == 'Gros acheteurs' %}<i class="fa-solid fa-crown"></i>
+                {% elif row.segment_nom == 'Inactifs' %}<i class="fa-solid fa-moon"></i>
+                {% elif row.segment_nom == 'Mécontents' %}<i class="fa-solid fa-triangle-exclamation"></i>
+                {% elif row.segment_nom == 'Nouveaux' %}<i class="fa-solid fa-star"></i>
+                {% endif %}
+            </div>
+            <div class="seg-pct">{{ row.pct }}%</div>
+        </div>
+
+        <div class="seg-name">{{ row.segment_nom }}</div>
+        <div class="seg-count">{{ row.count }} clients</div>
+
+        <div class="seg-stats">
+            <div><span>Récence moy.</span><span>{{ row.recency }} j</span></div>
+            <div><span>Fréquence</span><span>{{ row.frequency }}</span></div>
+            <div><span>Montant moy.</span><span>R$ {{ row.monetary }}</span></div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- DETAIL SEGMENT -->
+<div class="segment-detail" id="segment-detail">
+    {% for row in moyennes %}
+    <div class="detail-content" id="detail-{{ row.segment_nom }}" style="display:none;">
+        <div class="detail-header">
+            <div class="seg-icon seg-icon-{{ row.segment_nom | lower | replace(' ', '-') }}">
+                {% if row.segment_nom == 'Fidèles' %}<i class="fa-solid fa-heart"></i>
+                {% elif row.segment_nom == 'Gros acheteurs' %}<i class="fa-solid fa-crown"></i>
+                {% elif row.segment_nom == 'Inactifs' %}<i class="fa-solid fa-moon"></i>
+                {% elif row.segment_nom == 'Mécontents' %}<i class="fa-solid fa-triangle-exclamation"></i>
+                {% elif row.segment_nom == 'Nouveaux' %}<i class="fa-solid fa-star"></i>
+                {% endif %}
+            </div>
+            <h2>{{ row.segment_nom }}</h2>
+        </div>
+        <div class="detail-grid">
+            <div class="detail-card">
+                <div class="detail-card-title">Caracteristiques</div>
+                <div class="detail-row"><span>Récence moyenne</span><span>{{ row.recency }} jours</span></div>
+                <div class="detail-row"><span>Fréquence</span><span>{{ row.frequency }} commandes</span></div>
+                <div class="detail-row"><span>Montant moyen</span><span>R$ {{ row.monetary }}</span></div>
+                <div class="detail-row"><span>Satisfaction</span><span>{{ row.satisfaction }} / 5</span></div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-card-title">Stratégie de ciblage</div>
+                <p class="detail-strategie">{{ strategie[row.segment_nom] }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+const couleurs = {
+    'Fidèles': 'rgba(29,233,182,0.12)',
+    'Gros acheteurs': 'rgba(255,182,39,0.12)',
+    'Inactifs': 'rgba(90,97,117,0.12)',
+    'Mécontents': 'rgba(255,92,92,0.12)',
+    'Nouveaux': 'rgba(86,204,242,0.12)'
+};
+
+function showSegment(nom, el) {
+    document.querySelectorAll('.detail-content').forEach(d => d.style.display = 'none');
+    document.querySelectorAll('.segment-card').forEach(c => c.classList.remove('active'));
+    document.getElementById('detail-' + nom).style.display = 'block';
+    el.classList.add('active');
+    document.getElementById('segment-detail').style.background = couleurs[nom];
+}
+
+// Afficher le premier segment par défaut
+window.onload = function() {
+    const firstCard = document.querySelector('.segment-card');
+    const firstName = firstCard.querySelector('.seg-name').textContent.trim();
+    showSegment(firstName, firstCard);
+    firstCard.classList.add('active');
+}
+</script>
+
+
+{% endblock %}

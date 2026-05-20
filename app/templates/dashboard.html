@@ -1,0 +1,99 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="page-head">
+    <div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-sub">{{ stats.total_clients }} clients analysés · Olist Brazil · 2018</p>
+    </div>
+</div>
+
+<!-- 4 CARDS -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-label">Clients</div>
+        <div class="stat-value">{{ stats.total_clients }}</div>
+        <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Segments</div>
+        <div class="stat-value">{{ stats.nb_segments }}</div>
+        <div class="stat-icon"><i class="fa-solid fa-layer-group"></i></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">CA Total</div>
+        <div class="stat-value">R$ {{ "{:,.0f}".format(stats.ca_total) }}</div>
+        <div class="stat-icon"><i class="fa-solid fa-money-bill"></i></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Note Moyenne</div>
+        <div class="stat-value">{{ stats.note_moyenne }}</div>
+        <div class="stat-icon"><i class="fa-solid fa-star"></i></div>
+    </div>
+</div>
+
+<!-- GRILLE AVEC GRAPHIQUE + TABLEAU -->
+<div class="dashboard-grid">
+
+    <!-- DONUT -->
+    <div class="card">
+        <div class="card-title">Répartition des segments</div>
+        <canvas id="donutChart"></canvas>
+    </div>
+
+    <!-- TABLEAU CLIENTS RÉCENTS -->
+    <div class="card">
+        <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Clients récents assignés</span>
+            <a  style="color: #56CCF2; font-size: 12px; text-decoration: none;">Tout voir </a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Client</th>
+                    <th>Récence</th>
+                    <th>Fréq.</th>
+                    <th>Montant</th>
+                    <th>Segment</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for client in clients_recents %}
+                <tr>
+                    <td>{{ client.id }}</td>
+                    <td>{{ client.recency }}</td>
+                    <td>{{ client.frequency }}</td>
+                    <td>{{ client.monetary }}</td>
+                    <td>{{ client.segment_emoji }} {{ client.segment_nom }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+new Chart(document.getElementById('donutChart'), {
+    type: 'doughnut',
+    data: {
+        labels: {{ stats.segments.keys() | list | tojson }},
+        datasets: [{
+            data: {{ stats.segments.values() | list | tojson }},
+            backgroundColor: ['#56CCF2', '#6c74f5', '#1de9b6', '#ffb627', '#ff5c5c'],
+            borderWidth: 0
+        }]
+    },
+    options: {
+        cutout: '65%',
+        animation: false,
+        plugins: {
+            legend: { position: 'right', labels: { color: '#6b7280', font: { size: 12 } } }
+        }
+    }
+});
+</script>
+
+{% endblock %}

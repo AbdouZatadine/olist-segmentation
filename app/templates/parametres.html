@@ -1,0 +1,103 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="page-head">
+    <div>
+        <h1 class="page-title">Paramètres</h1>
+        <p class="page-sub">Informations sur le modèle et le projet</p>
+    </div>
+</div>
+
+<div class="params-grid">
+
+    <!-- MODELE -->
+    <div class="card">
+        <div class="card-title"><i class="fa-solid fa-robot" style="color:#56CCF2"></i> Modèle</div>
+        <div class="param-list">
+            <div class="param-row">
+                <span>Algorithme</span>
+                <span class="param-badge" style="background:rgba(86,204,242,0.12);color:#56CCF2">K-Means</span>
+            </div>
+            <div class="param-row">
+                <span>Clusters</span>
+                <span class="param-value">5</span>
+            </div>
+            <div class="param-row">
+                <span>Normalisation</span>
+                <span class="param-badge" style="background:rgba(29,233,182,0.12);color:#1de9b6">StandardScaler</span>
+            </div>
+            <div class="param-row">
+                <span>Fichier modèle</span>
+                <span class="param-value">kmeans_model.pkl</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROJET -->
+    <div class="card">
+        <div class="card-title"><i class="fa-solid fa-folder" style="color:#ffb627"></i> Projet</div>
+        <div class="param-list">
+            <div class="param-row">
+                <span>Nom</span>
+                <span class="param-value">Olist Segmentation</span>
+            </div>
+            <div class="param-row">
+                <span>Dataset</span>
+                <span class="param-value">Olist Brazil</span>
+            </div>
+            <div class="param-row">
+                <span>Clients analysés</span>
+                <span class="param-badge" style="background:rgba(108,116,245,0.12);color:#6c74f5">93 357</span>
+            </div>
+            <div class="param-row">
+                <span>Version</span>
+                <span class="param-badge" style="background:rgba(86,204,242,0.12);color:#56CCF2">v1.0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- A PROPOS -->
+    <div class="card">
+        <div class="card-title"><i class="fa-solid fa-circle-info" style="color:#6c74f5"></i> A propos</div>
+        <div class="param-list">
+            <div class="param-row">
+                <span>Développeur</span>
+                <span class="param-value">Zatadine</span>
+            </div>
+            <div class="param-row">
+                <span>Technologie</span>
+                <span class="param-badge" style="background:rgba(255,92,92,0.12);color:#ff5c5c">Flask + scikit-learn</span>
+            </div>
+            <div class="param-row">
+                <span>Année</span>
+                <span class="param-value">2026</span>
+            </div>
+        </div>
+    </div>
+    <!-- FORMATION -->
+<div class="card">
+    <div class="card-title"><i class="fa-solid fa-graduation-cap" style="color:#1de9b6"></i> Formation</div>
+    <div class="param-list">
+        <div class="param-row">
+            <span>Etablissement</span>
+            <span class="param-badge" style="background:rgba(29,233,182,0.12);color:#1de9b6">Bakeli</span>
+        </div>
+        <div class="param-row">
+            <span>Filière</span>
+            <span class="param-value">Analyse de données & IA</span>
+        </div>
+        <div class="param-row">
+            <span>Durée</span>
+            <span class="param-value">6 mois</span>
+        </div>
+        <div class="param-row">
+            <span>Encadreur</span>
+            <span class="param-badge" style="background:rgba(108,116,245,0.12);color:#6c74f5">Ousmane DIALLO</span>
+        </div>
+    </div>
+</div>
+
+</div>
+
+{% endblock %}

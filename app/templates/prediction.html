@@ -1,0 +1,113 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="page-head">
+    <div>
+        <h1 class="page-title">Prédiction</h1>
+        <p class="page-sub">Renseignez les métriques RFM pour affecter le client au segment correspondant</p>
+    </div>
+</div>
+
+<div class="prediction-container">
+
+    <!-- FORMULAIRE -->
+    <div class="card">
+        <div class="card-title">
+            Métriques RFM
+            <span class="badge-kmeans">K-Means</span>
+        </div>
+
+        <!-- BADGES RFM -->
+        <div class="rfm-badges">
+            <div class="rfm-badge rfm-r"><i class="fa-solid fa-clock"></i> Récence</div>
+            <div class="rfm-badge rfm-f"><i class="fa-solid fa-repeat"></i> Fréquence</div>
+            <div class="rfm-badge rfm-m"><i class="fa-solid fa-money-bill"></i> Montant</div>
+            <div class="rfm-badge rfm-s"><i class="fa-solid fa-star"></i> Satisfaction</div>
+        </div>
+
+        <!-- CHAMPS -->
+        <div class="form-fields">
+            <div class="form-group">
+                <div class="form-label-row">
+                    <label>Récence</label>
+                    <span class="form-hint">Jours depuis dernier achat</span>
+                </div>
+                <input type="number" id="recency" placeholder="ex: 45" min="0">
+            </div>
+            <div class="form-group">
+                <div class="form-label-row">
+                    <label>Fréquence</label>
+                    <span class="form-hint">Nombre total de commandes</span>
+                </div>
+                <input type="number" id="frequency" placeholder="ex: 3" min="1">
+            </div>
+            <div class="form-group">
+                <div class="form-label-row">
+                    <label>Montant</label>
+                    <span class="form-hint">Total dépensé en R$</span>
+                </div>
+                <input type="number" id="monetary" placeholder="ex: 250" min="0">
+            </div>
+            <div class="form-group">
+                <div class="form-label-row">
+                    <label>Satisfaction</label>
+                    <span class="form-hint">Note de 1 à 5</span>
+                </div>
+                <input type="number" id="satisfaction" placeholder="ex: 4" min="1" max="5">
+            </div>
+        </div>
+
+        <button class="btn-predict" onclick="predire()">
+            <i class="fa-solid fa-bolt"></i> Affecter au segment
+        </button>
+    </div>
+
+    <!-- RESULTAT -->
+    <div class="card prediction-result" id="resultat">
+        <div class="result-empty" id="result-empty">
+            <i class="fa-solid fa-diamond fa-2x"></i>
+            <p>Renseignez les métriques RFM<br>et lancez l'affectation</p>
+        </div>
+        <div id="result-content" style="display:none;">
+            <div class="result-segment" id="result-segment"></div>
+            <div class="result-strategie" id="result-strategie"></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+async function predire() {
+    const recency = document.getElementById('recency').value;
+    const frequency = document.getElementById('frequency').value;
+    const monetary = document.getElementById('monetary').value;
+    const satisfaction = document.getElementById('satisfaction').value;
+
+    if (!recency || !frequency || !monetary || !satisfaction) {
+        alert('Veuillez remplir tous les champs !');
+        return;
+    }
+
+    const response = await fetch('/api/predict', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recency, frequency, monetary, satisfaction })
+    });
+
+    const data = await response.json();
+
+    document.getElementById('result-empty').style.display = 'none';
+    document.getElementById('result-content').style.display = 'block';
+    document.getElementById('result-segment').innerHTML = `
+        <div class="result-label">Segment détecté</div>
+        <div class="result-name"><i class="fa-solid fa-user-tag"></i> ${data.segment}</div>
+    `;
+    document.getElementById('result-strategie').innerHTML = `
+        <div class="result-label">Stratégie recommandée</div>
+        <div class="result-text"><i class="fa-solid fa-lightbulb"></i> ${data.strategie}</div>
+    `;
+}
+</script>
+
+{% endblock %}
